@@ -17,7 +17,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "android-template-repo"
+rootProject.name = "android-virtual-display"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // Enable usage like implementation(projects.core.designsystem) in gradle
 

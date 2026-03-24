@@ -2,7 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--Virtual Display Permission starts here-->
+    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT"/>
+    <uses-permission android:name="android.permission.CAPTURE_SECURE_VIDEO_OUTPUT"/>
+    <uses-permission android:name="android.permission.INTERNAL_SYSTEM_WINDOW" />
+    <!--Virtual Display Permission ends here-->
+
+    <uses-permission android:name="android.permission.INJECT_EVENTS" />
+
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +22,7 @@
         android:theme="@style/Theme.Androidtemplaterepo"
         tools:targetApi="31">
         <activity
-            android:name="com.droidstarter.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Androidtemplaterepo">
