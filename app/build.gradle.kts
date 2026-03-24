@@ -1,13 +1,15 @@
+import com.droidstarter.support.SigningConfigs
+
 plugins {
     alias(libs.plugins.droidstarter.android.application.compose)
     alias(libs.plugins.droidstarter.android.hilt)
 }
 
 android {
-    namespace = "com.droidstarter"
+    namespace = "io.github.sridhar.sp.virtual.display"
 
     defaultConfig {
-        applicationId = "com.droidstarter"
+        applicationId = "io.github.sridhar.sp.virtual.display"
         versionCode = 1
         versionName = "1.0"
 
@@ -17,8 +19,17 @@ android {
         }
     }
 
+    SigningConfigs.newInstance(project).applyDefaultKeyStoreSigningConfig()
+
     buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName(SigningConfigs.DEFAULT_KEYSTORE_SIGNING_CONFIG)
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
         release {
+            signingConfig = signingConfigs.getByName(SigningConfigs.DEFAULT_KEYSTORE_SIGNING_CONFIG)
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
