@@ -33,4 +33,4 @@ This project demonstrates creating and managing a **Virtual Display** on Android
 
 ## Building
 
-This project uses Gradle Convention Plugins for build configuration. See the original README for build plugin details.
+This project uses Gradle Convention Plugins for build configuration. Checkout [This blog](https://medium.com/@sridhar-sp/simplify-your-android-builds-a-guide-to-convention-plugins-b9fea8c5e117) for more details.
