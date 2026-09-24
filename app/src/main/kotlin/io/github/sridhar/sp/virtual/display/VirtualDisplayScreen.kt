@@ -1,28 +1,23 @@
 package io.github.sridhar.sp.virtual.display
 
 import android.view.SurfaceView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun VirtualDisplayScreen(viewModel: VirtualDisplayViewModel = hiltViewModel()) {
+fun VirtualDisplayScreen(
+    modifier: Modifier,
+    controller: VirtualDisplayController
+) {
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Unspecified, MaterialTheme.shapes.large)
+        modifier = modifier
     ) {
         val boxSize = with(LocalDensity.current) {
             IntSize(
@@ -36,11 +31,11 @@ fun VirtualDisplayScreen(viewModel: VirtualDisplayViewModel = hiltViewModel()) {
 
         LaunchedEffect(key1 = boxSize, key2 = densityDpi) {
             logD("VirtualDisplayScreen: boxSize=$boxSize densityDpi $densityDpi")
-            viewModel.updateVirtualDisplayConfig(size = boxSize, densityDpi = densityDpi)
+            controller.updateVirtualDisplayConfig(size = boxSize, densityDpi = densityDpi)
         }
         AndroidView(factory = { context ->
             val surfaceView = SurfaceView(context)
-            viewModel.updateSurfaceView(surfaceView)
+            controller.updateSurfaceView(surfaceView)
             surfaceView
         }, modifier = Modifier.fillMaxSize(), update = { _ -> })
     }

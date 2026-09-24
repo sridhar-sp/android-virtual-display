@@ -3,7 +3,6 @@ package io.github.sridhar.sp.virtual.display
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.app.Application
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
@@ -20,16 +19,16 @@ import android.view.SurfaceView
 import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
-import javax.inject.Inject
 
-@HiltViewModel
-class VirtualDisplayViewModel @Inject constructor(private val context: Application) : AndroidViewModel(context) {
+class VirtualDisplayController(
+    private val context: Application,
+    private val launchIntent: Intent = Intent(Settings.ACTION_SETTINGS)
+) : AndroidViewModel(context) {
 
     private val displayManager by lazy { context.getSystemService(DisplayManager::class.java) }
 
@@ -176,8 +175,8 @@ class VirtualDisplayViewModel @Inject constructor(private val context: Applicati
             setupInputChannel()
         }
 
-        val settingsIntent = Intent(Settings.ACTION_SETTINGS)
-        launchAppInSpecificDisplay(getApplication(), settingsIntent, lastCreatedVirtualDisplay!!.display.displayId)
+        // todo keep surface hidden until launch is success, otherwise we will see Infinity Mirror Effect
+        launchAppInSpecificDisplay(getApplication(), launchIntent, lastCreatedVirtualDisplay!!.display.displayId)
     }
 
     @SuppressLint("DiscouragedPrivateApi")
