@@ -25,6 +25,8 @@ jacoco = "0.8.8"
 coreMedia = "0.2.14"
 androidxMedia = "1.7.0"
 constraintlayoutCompose = "1.0.1"
+jreleaser = "1.27.0"
+dokka = "2.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
@@ -65,6 +67,8 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jreleaser = { id = "org.jreleaser", version.ref = "jreleaser" }
+dokka = { id = "org.jetbrains.dokka" ,version.ref = "dokka"}
 
 # Plugins defined by this project`
 droidstarter-android-application = { id = "com.droidstarter.convention.application", version = "unspecified" }

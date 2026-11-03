@@ -7,4 +7,6 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.dagger.hilt) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.jreleaser) apply false
+    alias(libs.plugins.dokka) apply false
 }

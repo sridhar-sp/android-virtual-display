@@ -4,8 +4,8 @@ import org.gradle.api.JavaVersion
 import java.math.BigDecimal
 
 object AppConfig {
-    const val compileSdk = 35
-    const val minSdk = 24
+    const val compileSdk = 37
+    const val minSdk = 26
     const val targetSdk = 35
 
     val sourceCompatibility = JavaVersion.VERSION_17

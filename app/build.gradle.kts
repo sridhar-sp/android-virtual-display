@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(projects.core.designsystem)
 
+    implementation(projects.appView)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.junit4)
 }

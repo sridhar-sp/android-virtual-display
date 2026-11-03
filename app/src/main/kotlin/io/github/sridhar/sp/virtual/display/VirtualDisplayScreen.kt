@@ -1,5 +1,6 @@
 package io.github.sridhar.sp.virtual.display
 
+import android.util.Size
 import android.view.SurfaceView
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,8 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.viewinterop.AndroidView
+import io.github.sridhar_sp.appview.VirtualDisplayController
 
 @Composable
 fun VirtualDisplayScreen(
@@ -20,9 +21,9 @@ fun VirtualDisplayScreen(
         modifier = modifier
     ) {
         val boxSize = with(LocalDensity.current) {
-            IntSize(
-                width = this@BoxWithConstraints.maxWidth.toPx().toInt(),
-                height = this@BoxWithConstraints.maxHeight.toPx().toInt()
+            Size(
+                this@BoxWithConstraints.maxWidth.toPx().toInt(),
+                this@BoxWithConstraints.maxHeight.toPx().toInt()
             )
         }
 

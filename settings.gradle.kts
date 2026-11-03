@@ -24,3 +24,4 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // Enable usage like implemen
 include(":app")
 include(":core")
 include(":core:designsystem")
+include(":app-view")

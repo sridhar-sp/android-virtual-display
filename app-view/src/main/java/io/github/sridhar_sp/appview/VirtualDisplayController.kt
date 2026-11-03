@@ -1,41 +1,42 @@
-package io.github.sridhar.sp.virtual.display
+package io.github.sridhar_sp.appview
 
 import android.annotation.SuppressLint
-import android.app.ActivityOptions
 import android.app.Application
-import android.content.Context
-import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.DisplayMetrics
+import android.util.Log
+import android.util.Size
 import android.view.InputEvent
 import android.view.MotionEvent
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import androidx.compose.ui.unit.IntSize
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
+import kotlin.time.Duration.Companion.milliseconds
 
 class VirtualDisplayController(
     private val context: Application,
-    private val launchIntent: Intent = Intent(Settings.ACTION_SETTINGS)
-) : AndroidViewModel(context) {
+    private val onDisplayReady: (displayId: Int) -> Unit,
+) {
+
+    private val controllerScope = CoroutineScope(Dispatchers.Main)
 
     private val displayManager by lazy { context.getSystemService(DisplayManager::class.java) }
 
     lateinit var surfaceViewRef: WeakReference<SurfaceView>
         private set
 
-    private var virtualDisplaySize: IntSize? = null
+    private var virtualDisplaySize: Size? = null
 
     private var virtualDisplayDensityDpi = DisplayMetrics.DENSITY_DEFAULT
 
@@ -70,7 +71,7 @@ class VirtualDisplayController(
         logD("VirtualDisplayViewModel created ${hashCode()}")
     }
 
-    fun updateVirtualDisplayConfig(size: IntSize, densityDpi: Int) {
+    fun updateVirtualDisplayConfig(size: Size, densityDpi: Int) {
         virtualDisplaySize = size
         virtualDisplayDensityDpi = densityDpi
     }
@@ -136,8 +137,8 @@ class VirtualDisplayController(
         surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 logD("surfaceCreated")
-                viewModelScope.launch {
-                    delay(1000)
+                controllerScope.launch {
+                    delay(1000.milliseconds)
                     startAppInVirtualDisplay(holder.surface)
                 }
             }
@@ -176,7 +177,8 @@ class VirtualDisplayController(
         }
 
         // todo keep surface hidden until launch is success, otherwise we will see Infinity Mirror Effect
-        launchAppInSpecificDisplay(getApplication(), launchIntent, lastCreatedVirtualDisplay!!.display.displayId)
+        onDisplayReady(lastCreatedVirtualDisplay!!.display.displayId)
+//        launchAppInSpecificDisplay(context, getAppIntent(), lastCreatedVirtualDisplay!!.display.displayId)
     }
 
     @SuppressLint("DiscouragedPrivateApi")
@@ -235,33 +237,22 @@ class VirtualDisplayController(
         inputChannel = null
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    fun cleanUp() {
+        controllerScope.cancel()
         cleanupInputChannel()
         lastCreatedVirtualDisplay?.release()
         lastCreatedVirtualDisplay = null
     }
 
-
     companion object {
 
-        fun launchAppInSpecificDisplay(
-            context: Context,
-            intent: Intent,
-            displayId: Int,
-        ) {
-            val intentWithFlags = intent.apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
-            launchActivityInSpecificDisplay(context, displayId, intentWithFlags)
+        private fun logD(message: String) {
+            Log.d("av:", message)
         }
 
-        private fun launchActivityInSpecificDisplay(context: Context, displayId: Int, intent: Intent) {
-            logD("launchActivityInSpecificDisplay: displayId=$displayId intent - $intent ")
-            val activityOptions = ActivityOptions.makeBasic()
-            activityOptions.launchDisplayId = displayId
-            context.startActivity(intent, activityOptions.toBundle())
+        private fun logE(message: String) {
+            Log.e("av:", message)
         }
     }
 }
+
